@@ -1,0 +1,7 @@
+# syll_test.kfb
+
+all(Socrates, men)
+all(men, mortal)
+
+some(men, elderly)
+# by Calemes: some(elderly, mortal)

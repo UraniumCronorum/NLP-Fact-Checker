@@ -1,0 +1,74 @@
+# bc_syll.krb
+
+### Figure 1
+# (M, P) & (S, M) -> (P, S)
+
+Barbara
+	use all($S, $P)
+	when
+		syll_all($M, $P)
+		syll_all($S, $M)
+
+Celarent
+	use no($S, $P)
+	when
+		syll_no($M, $P)
+		syll_all($S, $M)
+
+Darii
+	use some($S, $P)
+	when
+		syll_all($M, $P)
+		syll_some($S, $M)
+
+Ferio
+	use notAll($S, $P)
+	when
+		syll_no($M, $P)
+		syll_some($S, $M)
+
+### Completeness
+out_all
+	use all($S, $P)
+	when
+		syll_all($S, $P)
+
+out_some
+	use some($S, $P)
+	when
+		syll_some($S, $P)
+
+### Symmetric Property
+# (A, B) -> (B, A)
+# valid for No and Some
+symm_no
+	use syll_no($B, $A)
+	when
+		syll.no($A, $B)
+
+symm_some
+	use syll_some($B, $A)
+	when
+		syll.some($A, $B)
+
+### Intermediate reasoning
+syll_all
+	use syll_all($S, $P)
+	when
+		syll.all($S, $P)
+
+syll_no
+	use syll_no($S, $P)
+	when
+		syll.no($S, $P)
+
+syll_some
+	use syll_some($S, $P)
+	when
+		syll.some($S, $P)
+
+syll_notAll
+	use syll_notAll($S, $P)
+	when
+		syll.notAll($S, $P)
+

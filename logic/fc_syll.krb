@@ -1,0 +1,103 @@
+# fc_syll.krb
+
+### Figure 1
+# (M, P) & (S, M) -> (P, S)
+
+Barbara
+	foreach
+		syll.all($M, $P)
+		syll.all($S, $M)
+	assert
+		syll.all($S, $P)
+
+Celarent
+	foreach
+		syll.no($M, $P)
+		syll.all($S, $M)
+	assert
+		syll.no($S, $P)
+
+Darii
+	foreach
+		syll.all($M, $P)
+		syll.some($S, $M)
+	assert
+		syll.some($S, $P)
+
+Ferio
+	foreach
+		syll.no($M, $P)
+		syll.some($S, $M)
+	assert
+		syll.notAll($S, $P)
+
+### Symmetric Property
+# (A, B) -> (B, A)
+# valid for No and Some
+
+symm_no
+	foreach
+		syll.no($A, $B)
+	assert
+		syll.no($B, $A)
+
+symm_some
+	foreach
+		syll.some($A, $B)
+	assert
+		syll.some($B, $A)
+
+### Existance
+
+##exists_some
+##	foreach
+##		syll.some($A, $B)
+##	assert
+##		syll.exists($A)
+
+##exists_notAll
+##	foreach
+##		syll.notAll($A, $B)
+##	assert
+##		syll.exists($A)
+
+##all_some
+##	foreach
+##		syll.all($A, $B)
+##		syll.exists($A)
+##	assert
+##		syll.some($A, $B)
+
+##no_notAll
+##	foreach
+##		syll.no($A, $B)
+##		syll.exists($A)
+##	assert
+##		syll.notAll($A, $B)
+
+### OUTPUT ###
+
+outAll
+	foreach
+		syll.all($A, $B)
+	assert
+		python print "All that are %s are %s." % ($A, $B)
+
+outNo
+	foreach
+		syll.no($A, $B)
+	assert
+		python print "None that are %s are %s." % ($A, $B)
+
+outSome
+	foreach
+		syll.some($A, $B)
+	assert
+		python print "Some that are %s are %s." % ($A, $B)
+
+outNotAll
+	foreach
+		syll.notAll($A, $B)
+	assert
+		python print "Not all that are %s are %s." % ($A, $B)
+
