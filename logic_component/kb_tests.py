@@ -10,16 +10,16 @@ class KnowledgeTest(unittest.TestCase):
 
     def setUp(self):
         self.db = KnowledgeBase(NumericalClaim)
-        self.known = Source('known', True)
+        self.known = Source('known')
         self.other = Source('s1')
 
     def testAdd(self):
-        self.db.addClaim(self.known, 13)  # 1101: p->q
+        self.db.addKnown(self.known, 13)  # 1101: p->q
         self.db.addClaim(self.other, 3)   # 0011: p
         self.db.addClaim(self.other, 10)  # 1010: ~q
 
-        with self.assertRaises(Exception):
-            self.db.addClaim(self.known, 2) # 0010: ~(p->q)
+        with self.assertRaises(KnownException):
+            self.db.addKnown(self.known, 2) # 0010: ~(p->q)
 
         self.assertTrue(self.db.trueOrFalse(13)) # 1101: p->q
         self.assertIsNone(self.db.trueOrFalse(3)) # 0011: p
