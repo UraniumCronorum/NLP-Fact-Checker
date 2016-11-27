@@ -39,17 +39,40 @@ class RuleBase:
 
     @classmethod
     def optimalContradictions(cls, premises):
-        ''' Return a list of all contradictions in the premises.
+        ''' Return a set of all contradictions in the premises.
 
         Contradictions should be expressed such that removing any claim removes
         the contradiction.'''
-        pass
+        def helper(claims):
+            if not cls.internalContradictions(cls, claims):
+                return False
+            else:
+                subsets = [out - {claim} for claim in claims]
+                out = set()
+                for subset in subsets:
+                    if subset:
+                        out |= optimalSubsets(subset)
+                if out:
+                    return out
+                else:
+                    return premises
+        return helper(premises)
 
     @classmethod
     def optimalSubsets(cls, premises):
-        ''' Return a list of subsets of claims.
+        ''' Return a set of subsets of claims.
 
         These subsets must contain no contradictions, and it must be impossible
         to add another claim from claims to the subset without introducing a
         contradiction.'''
-        pass
+        def helper(claims):
+            if not cls.internalContradictions(cls, claims):
+                return {claims}
+            else:
+                subsets = [out - {claim} for claim in claims]
+                out = set()
+                for subset in subsets:
+                    out |= optimalSubsets(subset)
+                return out
+                
+        return helper(premises)
