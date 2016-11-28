@@ -53,7 +53,7 @@ class KnowledgeBase:
 
     # Rank sources
     def truthRanking(self, source):
-        true, false, undecided = (0,0,0)
+        true, false, undecided = (0.0,0.0,0.0)
         for claim in self.claimsBySource(source):
             ruling = self.trueOrFalse(claim)
             if ruling is True:
@@ -69,8 +69,7 @@ class KnowledgeBase:
         return ranking.true/(ranking.false+ranking.true)
 
     def contradictsSelf(self, source):
-        if self.base.internalContradictions(self.base,
-                                            self.claimsBySource(source)):
+        if self.base.internalContradictions(self.claimsBySource(source)):
             return True
         else:
             return False

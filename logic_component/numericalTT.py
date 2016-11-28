@@ -12,6 +12,7 @@ def negate(claim):
 
 class NumericalClaim(rule_base.RuleBase):
 
+    @classmethod
     def provable(cls, claim, premises):
         claim = table(claim)
         premises = [table(premise) for premise in premises]
@@ -23,6 +24,7 @@ class NumericalClaim(rule_base.RuleBase):
                 return False
         return True
 
+    @classmethod
     def contradicts(cls, claim, premises):
         claim = table(claim)
         premises = [table(premise) for premise in premises]
@@ -34,6 +36,7 @@ class NumericalClaim(rule_base.RuleBase):
                 return False
         return True
 
+    @classmethod
     def internalContradictions(cls, premises):
         premises = [table(premise) for premise in premises]
 

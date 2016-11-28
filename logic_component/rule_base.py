@@ -23,11 +23,11 @@ class RuleBase:
         ''' Return True if the claim is provable from the premises,
         False, if the claim contradicts the premises,
         and None otherwise.'''
-        if cls.internalContradictions(cls, premises):
+        if cls.internalContradictions(premises):
             raise ContradictoryPremisesException
-        elif cls.provable(cls, claim, premises):
+        elif cls.provable(claim, premises):
             return True
-        elif cls.contradicts(cls, claim, premises):
+        elif cls.contradicts(claim, premises):
             return False
         else:
             return None
