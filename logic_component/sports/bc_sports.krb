@@ -1,0 +1,33 @@
+# sports.krb
+
+# Basic Relations
+plays_for
+	use plays_for($player, $team)
+	when
+		sports.plays_for($player, $team)
+
+weighs
+	use weighs($player, $weight)
+	when
+		sports.weighs($player, $weight)
+
+hasHeight
+	use hasHeight($player, $height)
+	when
+		sports.hasHeight($player, $weight)
+
+# Derivative relations
+
+heavier
+	use heavier($heavy, $light)
+	when
+		sports.weighs($heavy, $heaviness)
+		sports.weighs($light, $lightness)
+		check $lightness < $heaviness
+
+taller
+	use taller($tall, $short)
+	when
+		sports.hasHeight($tall, $tallness)
+		sports.hasHeight($short, $shortness)
+		check $shortness < $tallness
