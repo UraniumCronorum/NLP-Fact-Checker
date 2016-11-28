@@ -1,3 +1,4 @@
+import re
 import sys
 
 from nltk import pos_tag, word_tokenize
@@ -24,6 +25,30 @@ def merge_tags(pos, ner):
             prev_tok = tok
     return filter(lambda x: x != ('', ''), merged_tags)
 
+def extract_player_relation(toks):
+    player = ''
+    filler = []
+    team   = ''
+    for tag, tok in toks:
+        if player and team: break
+        if tag == 'PERSON':
+            player = tok
+        elif tag == 'ORGANIZATION':
+            team = tok
+        else:
+            filler.append((tag, tok))
+    print 'Player='+player
+    print 'Team='+team
+    fillertxt = ' '.join(map(lambda x: x[1], filler))
+    print 'Filler='+ fillertxt
+    regex = re.compile(r'(is|was) (a|an).*(player|plays|member).*(of|for|with).*the')
+    match = regex.match(fillertxt)
+    player = player.lower().replace(' ', '_')
+    team = team.lower().replace(' ', '_')
+    if match:
+        return 'playsfor('+player+','+team+')'
+    
+
 st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz')
 tokens = word_tokenize(open(sys.argv[1]).read())
 pos = pos_tag(tokens)
@@ -31,4 +56,5 @@ ne_tags = st.tag(tokens)
 
 tags = merge_tags(pos, ne_tags)
 
-print tags
+print extract_player_relation(tags)
+
