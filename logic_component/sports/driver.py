@@ -16,6 +16,8 @@ def test():
         with engine.prove_goal('bc_sports.heavier($h, $l)') as goal:
             for vars, plan in goal:
                 print vars
+        print engine.prove_1_goal('bc_sports.heavier(p2, p1)')
+        #print engine.prove_1_goal('bc_sports.heavier(p1, p2)')
     except:
         krb_traceback.print_exc()
         sys.exit(1)
