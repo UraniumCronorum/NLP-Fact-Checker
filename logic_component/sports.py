@@ -23,7 +23,7 @@ class SportsClaim(rule_base.RuleBase):
             out += ','
         return out[:-1] + ')'
 
-    valueClaims = ['plays_for', 'hasHeight', 'hasWeight']
+    valueClaims = ['plays_for', 'hasHeight', 'weighs']
     def disproveValue(self):
         goal = 'bc_sports.'+claim.relation+'('+self.strArg(self.args[0])+',$val)'
         for vars, plan in engine.prove_goal(goal):
