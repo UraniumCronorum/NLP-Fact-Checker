@@ -37,24 +37,30 @@ def extract_player_relation(toks):
             team = tok
         else:
             filler.append((tag, tok))
-    print 'Player='+player
-    print 'Team='+team
+    #print 'Player='+player
+    #print 'Team='+team
     fillertxt = ' '.join(map(lambda x: x[1], filler))
-    print 'Filler='+ fillertxt
+    #print 'Filler='+ fillertxt
     regex = re.compile(r'(is|was) (a|an).*(player|plays|member).*(of|for|with).*the')
     match = regex.match(fillertxt)
     player = player.lower().replace(' ', '_')
     team = team.lower().replace(' ', '_')
     if match:
-        return 'playsfor('+player+','+team+')'
+        return ['plays_for', player, team]
     
+def initialize_tagger():
+    st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz')
+    return st
 
-st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz')
-tokens = word_tokenize(open(sys.argv[1]).read())
-pos = pos_tag(tokens)
-ne_tags = st.tag(tokens)
+def tokenize(sentence):
+    tokens = word_tokenize(sentence)
+    return tokens
 
-tags = merge_tags(pos, ne_tags)
+def get_tags(tagger, tokens):
+    pos = pos_tag(tokens)
+    ne_tags = tagger.tag(tokens)
+    tags = merge_tags(pos, ne_tags)
+    return tags
 
-print extract_player_relation(tags)
+#print extract_player_relation(tags)
 
