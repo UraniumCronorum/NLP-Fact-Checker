@@ -1,6 +1,6 @@
 
 import rule_base
-from logic.driver import engine
+from syll.driver import engine
 from pyke.knowledge_engine import CanNotProve
 
 class SyllClaim(rule_base.RuleBase):
@@ -16,6 +16,7 @@ class SyllClaim(rule_base.RuleBase):
     def state(self):
         engine.assert_('syll', self.q, (self.s, self.p))
 
+    @classmethod
     def provable(cls, claim, premises):
         engine.reset()
         for premise in premises:
@@ -27,6 +28,7 @@ class SyllClaim(rule_base.RuleBase):
         except CanNotProve:
             return False
 
+    @classmethod
     def contradicts(cls, claim, premises):
         engine.reset()
         for premise in premises:
@@ -38,6 +40,7 @@ class SyllClaim(rule_base.RuleBase):
         except CanNotProve:
             return False
 
+    @classmethod
     def internalContradictions(cls, premises):
         for p in premises:
             if cls.contradicts(p, premises):
@@ -49,11 +52,11 @@ adorableCats = SyllClaim('all', 'cats', 'adorable')
 nonAdorableCats = SyllClaim('notAll', 'cats', 'adorable')
 adorableDogs = SyllClaim('all', 'dogs', 'adorable')
 
-print adorableCats.provable(adorableCats, [adorableCats])
-print adorableCats.contradicts(adorableCats, [adorableCats])
+print SyllClaim.provable(adorableCats, [adorableCats])
+print SyllClaim.contradicts(adorableCats, [adorableCats])
 
-print nonAdorableCats.provable(nonAdorableCats, [adorableCats])
-print nonAdorableCats.contradicts(nonAdorableCats, [adorableCats])
+print SyllClaim.provable(nonAdorableCats, [adorableCats])
+print SyllClaim.contradicts(nonAdorableCats, [adorableCats])
 
-print adorableCats.internalContradictions([adorableCats])
-print adorableCats.internalContradictions([adorableCats, nonAdorableCats])
+print SyllClaim.internalContradictions([adorableCats])
+print SyllClaim.internalContradictions([adorableCats, nonAdorableCats])
