@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="button.css"/>
+    <title>Natural Language Fact Checker</title>
+    <script>
+      function factCheck() {
+         var text = document.getElementById("textInput").value;
+         var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+               alert(this.responseText);
+               document.getElementById("trueA").classList.add("greenhover");
+               console.log(document.getElementById("trueSpan").classList);
+            }
+            document.body.style.cursor = 'default';
+         };
+         xhttp.open("GET", "factcheck?txt=" + encodeURIComponent(text), true);
+         xhttp.send();
+         document.body.style.cursor = 'progress';
+      }
+    </script>
+  </head>
+  <body>
+    <table>
+      <tr>
+	<td colspan=2><center><h1>Natural Language Fact Checker</h1></center></td>
+      </tr>
+      <tr>
+	<td colspan=2><textarea id="textInput" style="width: 800px; height: 8em"></textarea></td>
+      </tr>
+      <tr>
+	<td><button onclick="factCheck()">Check</button></td>
+      </tr>
+      <tr>
+	<td>
+	  <ul>
+	    <li><a id="trueA" href="#" class="round green">True<span id="trueSpan" class="round">The claim is valid!</span></a></li>
+	    <li><a id="falseA" href="#" class="round red">False<span id="falseSpan" class="round">The claim is invalid!</span></a></li>
+	  </ul>
+      </tr>
+    </table>
+  </body>
+</html>
