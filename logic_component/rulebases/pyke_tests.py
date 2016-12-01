@@ -1,5 +1,6 @@
 
 import unittest
+
 class SyllogismTest(unittest.TestCase):
     pass
 
