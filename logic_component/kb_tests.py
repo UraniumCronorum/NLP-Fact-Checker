@@ -1,7 +1,7 @@
 
 import unittest
 from knowledge_base import *
-from numericalTT import NumericalClaim
+from rulebases.numericalTT import NumericalClaim
 
 class SourceTest(unittest.TestCase):
 

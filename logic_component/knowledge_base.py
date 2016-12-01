@@ -2,7 +2,6 @@
 """ This module defines the database used for associating logical claims with their sources and truth values."""
 
 from collections import namedtuple
-import numericalTT
 
 Claim = namedtuple('Claim', 'representation source')
 TruthRanking = (namedtuple('TruthRanking', 'true false undecided'))

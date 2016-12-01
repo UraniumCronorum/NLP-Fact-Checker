@@ -79,10 +79,11 @@ class SportsClaim(rule_base.RuleBase):
         else:
             return False
 
-weightClaims = [SportsClaim('weighs', ('P1', 100)),
-                SportsClaim('weighs', ('P2', 200))]
+if __name__=='__main__':
+    weightClaims = [SportsClaim('weighs', ('P1', 100)),
+                    SportsClaim('weighs', ('P2', 200))]
 
-print SportsClaim.provable(SportsClaim('heavier', ('P2','P1')),
-                         weightClaims)
-print SportsClaim.contradicts(SportsClaim('heavier', ('P1','P2')),
-                            weightClaims)
+    print SportsClaim.provable(SportsClaim('heavier', ('P2','P1')),
+                               weightClaims)
+    print SportsClaim.contradicts(SportsClaim('heavier', ('P1','P2')),
+                                  weightClaims)

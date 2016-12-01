@@ -48,15 +48,17 @@ class SyllClaim(rule_base.RuleBase):
         else:
             return False
 
-adorableCats = SyllClaim('all', 'cats', 'adorable')
-nonAdorableCats = SyllClaim('notAll', 'cats', 'adorable')
-adorableDogs = SyllClaim('all', 'dogs', 'adorable')
+if __name__ == '__main__'
+    adorableCats = SyllClaim('all', 'cats', 'adorable')
+    nonAdorableCats = SyllClaim('notAll', 'cats', 'adorable')
+    adorableDogs = SyllClaim('all', 'dogs', 'adorable')
 
-print SyllClaim.provable(adorableCats, [adorableCats])
-print SyllClaim.contradicts(adorableCats, [adorableCats])
+    print SyllClaim.provable(adorableCats, [adorableCats])
+    print SyllClaim.contradicts(adorableCats, [adorableCats])
 
-print SyllClaim.provable(nonAdorableCats, [adorableCats])
-print SyllClaim.contradicts(nonAdorableCats, [adorableCats])
+    print SyllClaim.provable(nonAdorableCats, [adorableCats])
+    print SyllClaim.contradicts(nonAdorableCats, [adorableCats])
 
-print SyllClaim.internalContradictions([adorableCats])
-print SyllClaim.internalContradictions([adorableCats, nonAdorableCats])
+    print SyllClaim.internalContradictions([adorableCats])
+    print SyllClaim.internalContradictions([adorableCats, nonAdorableCats])
+
