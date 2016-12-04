@@ -25,12 +25,14 @@ class SportsClaim(rule_base.RuleBase):
 
     valueClaims = ['plays_for', 'hasHeight', 'weighs']
     def disproveValue(self):
-        goal = 'bc_sports.'+claim.relation+'('+self.strArg(self.args[0])+',$val)'
-        for vars, plan in engine.prove_goal(goal):
-            # should be at most one
-            if vars['val'] != args[1]:
-                return True
-        return False
+        goal = 'bc_sports.'+self.relation+'('+self.strArg(self.args[0])+',$val)'
+        with engine.prove_goal(goal) as g:
+            print g
+            for vars, plan in g:
+                # should be at most one
+                if vars['val'] != args[1]:
+                    return True
+                return False
 
     orderClaims = ['heavier', 'taller']
     def disproveOrder(self):
@@ -51,6 +53,7 @@ class SportsClaim(rule_base.RuleBase):
         for premise in premises:
             premise.state()
         goal = 'bc_sports.'+claim.relation+cls.strArgs(*claim.args)
+        print goal
         try:
             engine.prove_1_goal(goal)
             return True
