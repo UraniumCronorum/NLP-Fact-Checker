@@ -3,14 +3,27 @@
     <link rel="stylesheet" type="text/css" href="button.css"/>
     <title>Natural Language Fact Checker</title>
     <script>
+      // called when user clicks the check button
       function factCheck() {
+         // first, remove any effect from the true/false buttons
+         document.getElementById("trueA").classList.remove("hover");
+         document.getElementById("trueSpan").classList.remove("hover");
+         document.getElementById("falseA").classList.remove("hover");
+         document.getElementById("falseSpan").classList.remove("hover");
+         // grab the text the user input
          var text = document.getElementById("textInput").value;
+         // create new ajax request
          var xhttp = new XMLHttpRequest();
          xhttp.onreadystatechange = function() {
+            // check the response for true/false and set the appropriate effect
             if (this.readyState == 4 && this.status == 200) {
-               alert(this.responseText);
-               document.getElementById("trueA").classList.add("greenhover");
-               console.log(document.getElementById("trueSpan").classList);
+               if (this.responseText == "True") {
+                  document.getElementById("trueA").classList.add("hover");
+                  document.getElementById("trueSpan").classList.add("hover");
+               } else {
+                  document.getElementById("falseA").classList.add("hover");
+                  document.getElementById("falseSpan").classList.add("hover");
+               }
             }
             document.body.style.cursor = 'default';
          };
