@@ -41,12 +41,67 @@ def extract_player_relation(toks):
     #print 'Team='+team
     fillertxt = ' '.join(map(lambda x: x[1], filler))
     #print 'Filler='+ fillertxt
-    regex = re.compile(r'(is|was) (a|an).*(player|plays|member).*(of|for|with).*the')
+    regex = re.compile(r'(is|was)* (a|an)*.*(player|plays|member).*(of|for|with).*the')
     match = regex.match(fillertxt)
     player = player.lower().replace(' ', '_')
     team = team.lower().replace(' ', '_')
     if match:
         return ['plays_for', player, team]
+
+def extract_age_relation(toks):
+    player = ''
+    filler = []
+    age    = ''
+    for tag, tok in toks:
+        if tag == 'PERSON':
+            player = tok
+        elif tag == 'CD':
+            age = tok
+        else:
+            filler.append((tag, tok))
+    fillertxt = ' '.join(map(lambda x: x[1], filler))
+    regex = re.compile(r'(is|the).*(year(s)* (old|of age))')
+    match = regex.match(fillertxt)
+    player = player.lower().replace(' ', '_')
+    if match:
+        return ['age', player, age]
+
+def extract_weight_relation(toks):
+    player = ''
+    filler = []
+    weight    = ''
+    for tag, tok in toks:
+        if tag == 'PERSON':
+            player = tok
+        elif tag == 'CD':
+            age = tok
+        else:
+            filler.append((tag, tok))
+    fillertxt = ' '.join(map(lambda x: x[1], filler))
+    regex = re.compile(r'.*weighs.*')
+    match = regex.match(fillertxt)
+    player = player.lower().replace(' ', '_')
+    if match:
+        return ['weighs', player, weight]
+
+def extract_height_relation(toks):
+    player = ''
+    filler = []
+    height    = ''
+    for tag, tok in toks:
+        if tag == 'PERSON':
+            player = tok
+        elif tag == 'CD':
+            age = tok
+        else:
+            filler.append((tag, tok))
+    fillertxt = ' '.join(map(lambda x: x[1], filler))
+    # TODO complete this regex for height extraction
+    regex = re.compile(r'.*weighs.*')
+    match = regex.match(fillertxt)
+    player = player.lower().replace(' ', '_')
+    if match:
+        return ['height', player, height]
     
 def initialize_tagger():
     st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz')
