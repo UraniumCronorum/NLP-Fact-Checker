@@ -14,12 +14,12 @@ weight
 height
 	use height($player, $height)
 	when
-		sports.height($player, $weight)
+		sports.height($player, $height)
 
 age
-	use age($player, $height)
+	use age($player, $age)
 	when
-		sports.age($player, $weight)
+		sports.age($player, $age)
 
 # Derivative relations
 
