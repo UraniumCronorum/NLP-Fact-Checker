@@ -36,7 +36,7 @@ class SportsClaim(rule_base.RuleBase):
                     return True
                 return False
 
-    orderClaims = ['heavier', 'taller']
+    orderClaims = ['heavier', 'taller', 'older']
     def disproveOrder(self):
         goal = 'bc_sports.'+self.relation+self.strArgs(self.args[1],self.args[0])
         try:
@@ -85,8 +85,8 @@ class SportsClaim(rule_base.RuleBase):
             return False
 
 if __name__=='__main__':
-    weightClaims = [SportsClaim('weighs', ('P1', 100)),
-                    SportsClaim('weighs', ('P2', 200))]
+    weightClaims = [SportsClaim('weight', ('P1', 100)),
+                    SportsClaim('weight', ('P2', 200))]
 
     print SportsClaim.provable(SportsClaim('heavier', ('P2','P1')),
                                weightClaims)
