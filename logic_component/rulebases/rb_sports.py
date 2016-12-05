@@ -25,7 +25,7 @@ class SportsClaim(rule_base.RuleBase):
 
     valueClaims = ['plays_for', 'hasHeight', 'weighs']
     def disproveValue(self):
-        goal = 'bc_sports.'+claim.relation+'('+self.strArg(self.args[0])+',$val)'
+        goal = 'bc_sports.'+self.relation+'('+self.strArg(self.args[0])+',$val)'
         for vars, plan in engine.prove_goal(goal):
             # should be at most one
             if vars['val'] != args[1]:
