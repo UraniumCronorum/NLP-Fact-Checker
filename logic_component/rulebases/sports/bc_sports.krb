@@ -6,28 +6,40 @@ plays_for
 	when
 		sports.plays_for($player, $team)
 
-weighs
-	use weighs($player, $weight)
+weight
+	use weight($player, $weight)
 	when
-		sports.weighs($player, $weight)
+		sports.weight($player, $weight)
 
-hasHeight
-	use hasHeight($player, $height)
+height
+	use height($player, $height)
 	when
-		sports.hasHeight($player, $weight)
+		sports.height($player, $weight)
+
+age
+	use age($player, $height)
+	when
+		sports.age($player, $weight)
 
 # Derivative relations
 
 heavier
 	use heavier($heavy, $light)
 	when
-		sports.weighs($heavy, $heaviness)
-		sports.weighs($light, $lightness)
+		sports.weight($heavy, $heaviness)
+		sports.weight($light, $lightness)
 		check $lightness < $heaviness
 
 taller
 	use taller($tall, $short)
 	when
-		sports.hasHeight($tall, $tallness)
-		sports.hasHeight($short, $shortness)
+		sports.height($tall, $tallness)
+		sports.height($short, $shortness)
 		check $shortness < $tallness
+
+older
+	use older($old, $young)
+	when
+		sports.age($old, $oldness)
+		sports.age($young, $youngness)
+		check $youngness < $oldness
