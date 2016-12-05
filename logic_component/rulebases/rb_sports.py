@@ -23,14 +23,16 @@ class SportsClaim(rule_base.RuleBase):
             out += ','
         return out[:-1] + ')'
 
-    valueClaims = ['plays_for', 'hasHeight', 'weighs']
+    valueClaims = ['plays_for', 'height', 'weight', 'age']
+
     def disproveValue(self):
         goal = 'bc_sports.'+self.relation+'('+self.strArg(self.args[0])+',$val)'
         with engine.prove_goal(goal) as g:
-            print g
             for vars, plan in g:
+                print 'vars = ' + str(vars)
+                print 'plan = ' + str(plan)
                 # should be at most one
-                if vars['val'] != args[1]:
+                if vars['val'] != self.args[1]:
                     return True
                 return False
 

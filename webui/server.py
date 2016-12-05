@@ -1,5 +1,4 @@
 import sys
-
 import cherrypy
 
 sys.path.insert(-1, '../nlp/')
@@ -20,11 +19,15 @@ class Server(object):
     def factcheck(self, txt):
         tokens = tagger.tokenize(txt)
         tags = tagger.get_tags(self.tgr, tokens)
-        relation = tagger.extract_player_relation(tags)
-        print relation
-        ans = db.trueOrFalse(rb_sports.SportsClaim(relation[0], tuple(relation[1:])))
-        print ans
-        return str(ans)
+        answers = []
+        for extractor in [tagger.extract_player_relation, tagger.extract_age_relation]:
+            relation = extractor(tags)
+            if relation:
+                print 'found relation', relation
+                ans = db.trueOrFalse(rb_sports.SportsClaim(relation[0], tuple(relation[1:])))
+                print ans
+                if ans != None: answers.append(ans)
+        return str(len(filter(lambda x: not x, answers)) == 0)
     
     def index(self):
         return open('index.html').read()
