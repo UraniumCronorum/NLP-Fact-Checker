@@ -64,8 +64,9 @@ breaklinks=true,
 
 \section{Introduction}
 
-Fact checking is the task of finding evidence to validate or invalidate a given claim.   We propose to create a system which can verify basic types of claims automatically, without the need for a human fact checker.
+Fact checking is the task of finding evidence to validate or invalidate a given claim. This discipline is most widely applied by journalistic organizations such as newspapers, magazines, and radio/television broadcasters.  However, fact checking isn't limited to journalism, it is also necessary in other venues such as academic publishing.  Fact checking is either applied either before (ante hoc) or after (post hoc) information has been released, and may be performed by an individual within an organization (e.g. journalist) or by an outside fact checking organization like factcheck.org \ref{factcheck} or Politifact \ref{politifact}.  In any case, whether the fact checking is done for print or broadcast media, by internal or external agents, or for a news article or journal publication, the fact checking is always performed by a human being.  In this paper, we propose a system which can verify basic types of claims automatically, without the need for a human fact checker.
 
+\subsection{Related Work}
 Fullfact.org defines three main approaches to automated fact checking: reference, machine learning, and context.  The reference approach relies on some official source of information to validate the claim.  The machine learning approach uses some model of how the world works to estimate the likelihood of a claim.  The contextual approach looks at the prevalence of a claim to decide how likely it might be. \ref{fullfact}
 
 Hassan et al. present a system for identifying claims automatically via machine learning.  Their software, ClaimBuster, performs natural language processing tasks such as sentiment analysis, tokenization, part of speech tagging, and entity resolution to classify a sentence as non-factual, unimportant factual, or check-worthy factual.  This system reduces the amount of time spent searching for claims to be validated, though it does not perform the validation itself.  \ref{hassan}
@@ -75,14 +76,7 @@ Ciampaglia et al. take a graph-theoretic approach to automated fact checking.  T
 
 \section{Project Description}
 
-On each page your material (not including the page number) should fit
-within a rectangle of 18 x 23.5 cm (7 x 9.25 in.), centered on a US
-letter page, beginning 1.9 cm (.75 in.) from the top of the page, with
-a .85 cm (.33 in.) space between two 8.4 cm (3.3 in.) columns.  On an
-A4 page, use a text area of the same dimensions (18 x 23.5 cm.), again
-centered.  Right margins should be justified, not ragged. Beware,
-especially when using this template on a Macintosh, Word can change
-these dimensions in unexpected ways.
+
 
 \section{Analysis of Results}
 
@@ -129,7 +123,7 @@ System~\cite{acm_categories}.  In general, it should only be necessary
 to pick one or more of the H5 subcategories, see
 http://www.acm.org/class/1998/H.5.html
 
-\section{Acknowledgements}
+\section{Acknowledgments}
 
 Please use a 10-point Times Roman font or, if this is unavailable,
 another proportional font with serifs, as close as possible in
