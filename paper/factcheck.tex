@@ -130,7 +130,7 @@ Part-of-speech tagging is the process of identifying the part-of-speech for a gi
 \section{Analysis of Results}
 
 
-\subsection{Discussion}
+\section{Discussion}
 
 Your paper's title, authors and affiliations should run across the
 full width of the page in a single column 17.8 cm (7 in.) wide.  The
@@ -148,6 +148,23 @@ information in a footnote, or in a named section at the end of your
 paper. Please use full international addresses and telephone dialing
 prefixes.  Leave one 10-pt line of white space below the last line of
 affiliations.
+
+\subsection{Ethical implications of this work}
+
+Generally, the purpose of fact-checking of this sort is to help people make decisions between opposing viewpoints, based on whether the facts their arguments depend on are accurate.
+It can also provide a proxy for judging a politician's trustworthiness, as a politician who relies on a lot of falsehoods likely cannot be trusted as much as one who does not.
+
+This means that users could rely on technology like this to make very important judgments; often judgements that would impact the result of elections.
+Because it is important for these judgements to be sound, designers of a technology like this have a clear responsibility to make the meaning of the results clear, and to make the process as transparent as possible.
+
+Ideally, in order to allow users to make their own judgments about the meaning of the results, the AI should not just output either True or False (or some intermediate value), but also should show the basis for those results, including sources.
+Our implementation does this to some extent--see the debug mode in the web UI, and note that our knowledge base is capable of keeping track of the sources for its claims.
+
+Another concern for an implementation of an AI like this is how the knowledge base is populated.
+For example, if some of the information comes from social media websites or other sources where personal information might be available, this raises the issue of how to handle users' privacy.
+
+Additionally, some potential sources, such as WikiLeaks, have questionable legal and ethical status.
+The decision about whether or not to use a source like this could depend on an ethical judgment about whether it is okay to use information that has been distributed in violation of laws--or indeed whether there is an obligation to distribute censored information as an act of civil disobedience.
 
 \section{Conclusions}
 
