@@ -3,6 +3,7 @@
 \usepackage{url}
 \usepackage{graphics}
 \usepackage{color}
+\usepackage{listings}
 \usepackage[pdftex]{hyperref}
 \hypersetup{%
 pdftitle={Your Title},
@@ -64,14 +65,14 @@ breaklinks=true,
 
 \section{Introduction}
 
-Fact checking is the task of finding evidence to validate or invalidate a given claim. This discipline is most widely applied by journalistic organizations such as newspapers, magazines, and radio/television broadcasters.  However, fact checking isn't limited to journalism, it is also necessary in other venues such as academic publishing.  Fact checking is either applied either before (ante hoc) or after (post hoc) information has been released, and may be performed by an individual within an organization (e.g. journalist) or by an outside fact checking organization like factcheck.org \ref{factcheck} or Politifact \ref{politifact}.  In any case, whether the fact checking is done for print or broadcast media, by internal or external agents, or for a news article or journal publication, the fact checking is always performed by a human being.  With more people getting their news from social media outlets such as Facebook and Twitter, there is a need to scale up fact checking to handle the tremendous volume and rate at which stories are disseminated.  In this paper, we propose a system which can verify basic types of claims automatically, without the need for a human fact checker.
+Fact checking is the task of finding evidence to validate or invalidate a given claim. This discipline is most widely applied by journalistic organizations such as newspapers, magazines, and radio/television broadcasters.  However, fact checking isn't limited to journalism, it is also necessary in other venues such as academic publishing.  Fact checking is either applied either before (ante hoc) or after (post hoc) information has been released, and may be performed by an individual within an organization (e.g. journalist) or by an outside fact checking organization like factcheck.org \cite{factcheck} or Politifact \cite{politifact}.  In any case, whether the fact checking is done for print or broadcast media, by internal or external agents, or for a news article or journal publication, the fact checking is always performed by a human being.  With more people getting their news from social media outlets such as Facebook and Twitter, there is a need to scale up fact checking to handle the tremendous volume and rate at which stories are disseminated.  In this paper, we propose a system which can verify basic types of claims automatically, without the need for a human fact checker.
 
 \subsection{Related Work}
-Researchers at Fullfact.org \ref{babakar_moy_2016} define three main approaches to automated fact checking: reference, machine learning, and context.  The reference approach relies on some official source of information to validate the claim.  The machine learning approach uses some model of how the world works to estimate the likelihood of a claim.  The contextual approach looks at the prevalence of a claim to decide how likely it might be.
+Researchers at Fullfact.org \cite{babakar_moy_2016} define three main approaches to automated fact checking: reference, machine learning, and context.  The reference approach relies on some official source of information to validate the claim.  The machine learning approach uses some model of how the world works to estimate the likelihood of a claim.  The contextual approach looks at the prevalence of a claim to decide how likely it might be.
 
-Hassan et al. \ref{hassan2015quest} present a system for identifying claims automatically via machine learning.  Their software, ClaimBuster, performs natural language processing tasks such as sentiment analysis, tokenization, part of speech tagging, and entity resolution to classify a sentence as non-factual, unimportant factual, or check-worthy factual.  This system reduces the amount of time spent searching for claims to be validated, though it does not perform the validation itself.  
+Hassan et al. \cite{hassan2015quest} present a system for identifying claims automatically via machine learning.  Their software, ClaimBuster, performs natural language processing tasks such as sentiment analysis, tokenization, part of speech tagging, and entity resolution to classify a sentence as non-factual, unimportant factual, or check-worthy factual.  This system reduces the amount of time spent searching for claims to be validated, though it does not perform the validation itself.  
 
-Ciampaglia et al. \ref{ciampaglia2015computational} take a graph-theoretic approach to automated fact checking.  They encode knowledge from Wikipedia into graph data structures called knowledge graphs that, together, form larger structures called knowledge networks.  They show that traditional graph/network analysis techniques such as shortest path computation can be used to efficiently evaluate the truthfulness of a claim.
+Ciampaglia et al. \cite{ciampaglia2015computational} take a graph-theoretic approach to automated fact checking.  They encode knowledge from Wikipedia into graph data structures called knowledge graphs that, together, form larger structures called knowledge networks.  They show that traditional graph/network analysis techniques such as shortest path computation can be used to efficiently evaluate the truthfulness of a claim.
 
 
 \section{Project Description}
@@ -82,9 +83,9 @@ The Natural Language Fact Checker employs concepts from two major areas of artif
 
 This section describes the key techniques, technologies and tools used in the natural language processing component.  
 
-All of the NLP code was implemented using the Python Natural Language Toolkit (NLTK) \ref{nltk}.  We chose to work with NLTK for many reasons, including our familiarity with the Python programming language, the availability of a number of NLP methods, the integration of numerous well known corpora, and the extensive collection of documentation and tutorials available online.
+All of the NLP code was implemented using the Python Natural Language Toolkit (NLTK) \cite{nltk}.  We chose to work with NLTK for many reasons, including our familiarity with the Python programming language, the availability of a number of NLP methods, the integration of numerous well known corpora, and the extensive collection of documentation and tutorials available online.
  
-For the fact checker, our NLP pipeline consisted of the following four steps:
+For the fact checker, our NLP pipeline consists of the following four steps:
 
 \begin{itemize}
    \item Tokenization
@@ -93,7 +94,16 @@ For the fact checker, our NLP pipeline consisted of the following four steps:
    \item Relation Extraction
 \end{itemize}
 
-Tokenization is the process by which a sentence is segmented into smaller pieces (i.e. words, punctuation, etc.).  Many NLP applications employ sentence segmentation to break a larger body of text into separate sentences, then apply tokenization to each sentence.  Our fact checker is designed to process only a single sentence at a time, therefore we have no need for sentence segmentation.  To perform tokenization, we use NLTK's \emph{word_tokenize} API, which takes in a single string sentence and produces a list of strings representing the tokens in the sentence.  
+Tokenization is the process by which a sentence is segmented into smaller pieces (i.e. words, punctuation, etc.).  Many NLP applications employ sentence segmentation to break a larger body of text into separate sentences, then apply tokenization to each sentence.  Our fact checker is designed to process only a single sentence at a time, therefore we have no need for sentence segmentation.  To perform tokenization, we use NLTK's word\_tokenize API, which takes in a single string sentence and produces a list of strings representing the tokens in the sentence.  The word\_tokenize method calls two underlying NLTK tokenization algorithms, TreeBankWordTokenizer and PunktSentenceTokenizer, which perform tokenization using a combination of predetermined regular expressions and a pretrained unsupervised model. Listing \ref{tokList} shows an example of tokenization using NLTK.
+
+\begin{lstlisting}[caption=NLTK Tokenization Example, label=tokList]
+>>> from nltk import word_tokenize
+>>> word_tokenize(``This is a sentence that has been tokenized using NLTK's word_tokenize API.'')
+['This', 'is', 'a', 'sentence', 'that', 'has', 'been', 'tokenized', 'using', 'NLTK', ``'s'', 'word_tokenize', 'API', '.']
+>>> 
+\end{lstlisting}
+
+
 
 \subsection{Logic Programming}
 
