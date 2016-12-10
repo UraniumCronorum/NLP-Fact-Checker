@@ -98,12 +98,27 @@ Tokenization is the process by which a sentence is segmented into smaller pieces
 
 \begin{lstlisting}[caption=NLTK Tokenization Example, label=tokList]
 >>> from nltk import word_tokenize
->>> word_tokenize(``This is a sentence that has been tokenized using NLTK's word_tokenize API.'')
-['This', 'is', 'a', 'sentence', 'that', 'has', 'been', 'tokenized', 'using', 'NLTK', ``'s'', 'word_tokenize', 'API', '.']
->>> 
+>>> word_tokenize(``This is a sentence
+ that has been tokenized using NLTK's 
+word_tokenize API.'')
+['This', 'is', 'a', 'sentence', 'that',
+ 'has', 'been', 'tokenized', 'using', 
+'NLTK', ``'s'', 'word_tokenize', 
+'API', '.']
 \end{lstlisting}
 
+Part-of-speech tagging is the process of identifying the part-of-speech for a given token.  The NLTK pos\_tag method relies on a pretrained Perceptron to classify a token's part-of-speech based on its context.  The pos\_tag method takes a list of string tokens and produces a list of token-tag pairs.  Each tag is represented as an abbreviation of the part-of-speech, and may include information about plurality, possession, and tense.  A collection of tags is referred to as a tagset.  By default, NLTK uses the UPenn tagset \cite{upenn_tags}.  Listing 2 shows an example of the NLTK pos\_tag capability.
 
+\begin{lstlisting}[caption=NLTK POS Tagger Example, label=tagList]
+>>> from nltk import pos_tag
+>>> pos_tag(tokens)
+[('This', 'DT'), ('sentence', 'NN'),
+ ('has', 'VBZ'), ('been', 'VBN'), 
+('tagged', 'VBN'), ('using', 'VBG'),
+ ('NLTK', 'NNP'), (``'s'', 'POS'), 
+('pos_tag', 'NN'), ('API', 'NNP'), 
+('.', '.')]
+\end{lstlisting}
 
 \subsection{Logic Programming}
 
