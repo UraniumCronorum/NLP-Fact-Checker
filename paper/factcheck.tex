@@ -257,6 +257,9 @@ Upon clicking the ``check'' button, the claim that was typed into the text input
 
 \section{Discussion}
 
+Given that our fact-checker applied elements of artificial intelligence that weren't necessarily covered in class, we learned a great deal about natural language processing and logic programming while implementing this project.  During the proposal phase, we were both unsure about the feasibility of an automated fact-checker and did a lot of research to identify the available techniques and make a judgment call on how realistic this project might be given the time constraints.  Our research involved reading unassigned chapters of Russell and Norvig, exploring state of the art research in the area of automated fact checking, and evaluating potential software libraries and tools.  
+
+We definitely gained an appreciation for the difficulties involved in natural language processing.  In fact, some of the limiting factors of the project were due to the complexity of the natural language processing component.  For example, the ability to resolve subjects and objects in a verb phrase would enhance the capability of the relation extractor by allowing more sophisticated sentences to be parsed.  This task is doable with NLTK, however, it requires a vast amount of linguistic knowledge to be able to interpret parse trees and other data structures.  Also, our fact-checker only handles single sentence claims, where all of the information we extract is present.  In the real word, authors typically use pronouns in place of proper nouns, employ sarcasm or literary devices, and spread information over multiple sentences.  These factors make the task of information extraction difficult, though there are established techniques to do this.
 
 
 \subsection{Ethical implications of this work}
