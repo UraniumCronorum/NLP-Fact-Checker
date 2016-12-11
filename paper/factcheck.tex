@@ -107,7 +107,7 @@ word_tokenize API.'')
 'API', '.']
 \end{lstlisting}
 
-Part-of-speech tagging is the process of identifying the part-of-speech for a given token.  The NLTK pos\_tag method relies on a pretrained Perceptron to classify a token's part-of-speech based on its context.  The pos\_tag method takes a list of string tokens and produces a list of token-tag pairs.  Each tag is represented as an abbreviation of the part-of-speech, and may include information about plurality, possession, and tense.  A collection of tags is referred to as a tagset.  Listing 2 shows an example of the NLTK pos\_tag capability.
+Part-of-speech tagging is the process of identifying the part-of-speech for a given token.  The NLTK pos\_tag method relies on a pretrained perceptron model to classify a token's part-of-speech based on its context.  The pos\_tag method takes a list of string tokens and produces a list of token-tag pairs.  Each tag is represented as an abbreviation of the part-of-speech, and may include information about plurality, possession, and tense.  A collection of tags is referred to as a tagset.  Listing 2 shows an example of the NLTK pos\_tag capability.
 
 \begin{lstlisting}[caption=NLTK POS Tagger Example, label=tagList]
 >>> from nltk import pos_tag
@@ -147,11 +147,47 @@ Named-entity extraction is the process of identifying tokens or phrases which re
 
 Relation extraction is the process of determining a relationship between one or more entities.  NLTK provides APIs for relation extraction, however we were not able to get them working to our satisfaction.  Instead of using the provided APIs for relation extraction, we took an approach using regular expressions.  Using the Python re module, We created a series of regular expressions that would match if text indicating a certain relationship was present.
 
+By leveraging NLTK and Stanford's named-entity recognizer, we were able to avoid the time consumings tasks of data annotation and model training.
+
 \subsection{Logic Programming}
 
 
 \subsection{Data}
+Due to time constraints, we restricted our fact checker to the domain of American professional basketball.  The reasons for this were many:
 
+\begin{itemize}
+\item The domain is well known and recognizable by most people (i.e. even non-basketball fans are likely to recognize an athlete such as LeBron James).
+\item The roster information and player physical characteristics do not change frequently, therefore the knowledge we encode is likely to be valid for a long duration (i.e. player height is not likely to change over time).
+\item The knowledge we chose to represent is well defined and publicly available from many sources.
+\item The number of athletes is static and low enough (30 teams in NBA, 15 players per team) that we were able to represent the complete set of all current NBA players without much effort.
+\end{itemize}
+
+In order to encode this knowledge into the logic base, we wrote a Python script that would scrape the roster data from https://en.wikipedia.org/wiki/List\_of\_current\_NBA\_team\_rosters.  The script leveraged BeautifulSoup4 \cite{beautifulsoup}, a Python package that provides an easy to use parser for structured documents such as HTML.  The Wikipedia page was scraped for player team affiliation, player height, player weight, and player age.  The height was represented in meters, weight in pounds, and age as number of years old.  Each of these characteristics was encoded as a Pyke rule, as shown in Table \ref{tableRules}.  We applied normalization to the player and team names such that all characters were converted to lowercase, special characters (e.g. spaces, hyphens, apostrophes) were replaced with the underscore character, and non-English alphabet characters were replaced with their corresponding English alphabet character (or as close as we could get).  For example, the character é would be replaced by the character e.
+
+  
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ | l | }
+\hline
+Rule \\
+\hline 
+plays\_for(seth\_curry,dallas\_mavericks) \\
+height(mario\_hezonja,2.03) \\
+height(jerami\_grant,2.03) \\
+weight(thon\_maker,223) \\
+age(marshall\_plumlee,24) \\
+age(kyrie\_irving,24) \\
+plays\_for(rodney\_stuckey,indiana\_pacers) \\
+plays\_for(hollis\_thompson,philadelphia\_76ers) \\
+age(andre\_iguodala,32) \\
+height(brandon\_knight,1.91) \\
+\hline
+\end{tabular}
+\caption{Random Sample of Pyke Rules}
+\label{tableRules}
+\end{center}
+\end{table}
 
 \subsection{Web UI}
 
