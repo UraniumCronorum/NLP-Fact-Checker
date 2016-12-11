@@ -25,6 +25,11 @@ breaklinks=true,
 
 \pagenumbering{arabic}  % Arabic page numbers for submission.  Remove this line to eliminate page numbers for the camera ready copy
 
+% remove copyright notice
+\makeatletter
+\def\@copyrightspace{\relax}
+\makeatother
+
 \begin{document}
 % to make various LaTeX processors do the right thing with page size
 \special{papersize=8.5in,11in}
@@ -164,8 +169,6 @@ Due to time constraints, we restricted our fact checker to the domain of America
 \end{itemize}
 
 In order to encode this knowledge into the logic base, we wrote a Python script that would scrape the roster data from https://en.wikipedia.org/wiki/List\_of\_current\_NBA\_team\_rosters.  The script leveraged BeautifulSoup4 \cite{beautifulsoup}, a Python package that provides an easy to use parser for structured documents such as HTML.  The Wikipedia page was scraped for player team affiliation, player height, player weight, and player age.  The height was represented in meters, weight in pounds, and age as number of years old.  Each of these characteristics was encoded as a Pyke rule, as shown in Table \ref{tableRules}.  We applied normalization to the player and team names such that all characters were converted to lowercase, special characters (e.g. spaces, hyphens, apostrophes) were replaced with the underscore character, and non-English alphabet characters were replaced with their corresponding English alphabet character (or as close as we could get).  For example, the character é would be replaced by the character e.
-
-  
 
 \begin{table}
 \begin{center}
