@@ -71,7 +71,11 @@ breaklinks=true,
 
 \section{Introduction}
 
-Fact checking is the task of finding evidence to validate or invalidate a given claim. This discipline is most widely applied by journalistic organizations such as newspapers, magazines, and radio/television broadcasters.  However, fact checking isn't limited to journalism, it is also necessary in other venues such as academic publishing.  Fact checking is either applied either before (ante hoc) or after (post hoc) information has been released, and may be performed by an individual within an organization (e.g. journalist) or by an outside fact checking organization like factcheck.org \cite{factcheck} or Politifact \cite{politifact}.  In any case, whether the fact checking is done for print or broadcast media, by internal or external agents, or for a news article or journal publication, the fact checking is always performed by a human being.  With more people getting their news from social media outlets such as Facebook and Twitter, there is a need to scale up fact checking to handle the tremendous volume and rate at which stories are disseminated.  In this paper, we propose a system which can verify basic types of claims automatically, without the need for a human fact checker.
+Fact checking is the task of finding evidence to validate or invalidate a given claim. This discipline is most widely applied by journalistic organizations such as newspapers, magazines, and radio/television broadcasters.  However, fact checking isn't limited to journalism, it is also necessary in other venues such as academic publishing.  
+
+Fact checking is either applied either before (ante hoc) or after (post hoc) information has been released, and may be performed by an individual within an organization (e.g. journalist) or by an outside fact checking organization like factcheck.org \cite{factcheck} or Politifact \cite{politifact}.  In any case, whether the fact checking is done for print or broadcast media, by internal or external agents, or for a news article or journal publication, the fact checking is always performed by a human being.  
+
+With more people getting their news from social media outlets such as Facebook and Twitter, there is a need to scale up fact checking to handle the tremendous volume and rate at which stories are disseminated.  In this paper, we propose a system which can verify basic types of claims automatically, without the need for a human fact checker.
 
 \subsection{Related Work}
 Researchers at Fullfact.org \cite{babakar_moy_2016} define three main approaches to automated fact checking: reference, machine learning, and context.  The reference approach relies on some official source of information to validate the claim.  The machine learning approach uses some model of how the world works to estimate the likelihood of a claim.  The contextual approach looks at the prevalence of a claim to decide how likely it might be.
@@ -157,6 +161,7 @@ By leveraging NLTK and Stanford's named-entity recognizer, we were able to avoid
 
 \begin{lstlisting}[caption=Merged Tags Example, label=lstMerge]
 Original Sentence:
+
 John spent his life breaking barriers,
 from defending our freedom as a 
 decorated Marine Corps fighter pilot 
@@ -166,6 +171,7 @@ becoming, at age 77, the oldest human
 to touch the stars.
 
 Merged Tags:
+
 [('PERSON', 'John'), ('VBD', 'spent'),
 ('PRP$', 'his'), ('NN', 'life'), 
 ('VBG', 'breaking'), 
@@ -206,7 +212,9 @@ Due to time constraints, we restricted our fact checker to the domain of America
 \item The number of athletes is static and low enough (30 teams in NBA, 15 players per team) that we were able to represent the complete set of all current NBA players without much effort.
 \end{itemize}
 
-In order to encode this knowledge into the logic base, we wrote a Python script that would scrape the roster data from https://en.wikipedia.org/wiki/List\_of\_current\_NBA\_team\_rosters.  The script leveraged BeautifulSoup4 \cite{beautifulsoup}, a Python package that provides an easy to use parser for structured documents such as HTML.  The Wikipedia page was scraped for player team affiliation, player height, player weight, and player age.  The height was represented in meters, weight in pounds, and age as number of years old.  Each of these characteristics was encoded as a Pyke rule, as shown in Table \ref{tableRules}.  We applied normalization to the player and team names such that all characters were converted to lowercase, special characters (e.g. spaces, hyphens, apostrophes) were replaced with the underscore character, and non-English alphabet characters were replaced with their corresponding English alphabet character (or as close as we could get).  For example, the character é would be replaced by the character e.
+In order to encode this knowledge into the logic base, we wrote a Python script that would scrape the roster data from https://en.wikipedia.org/wiki/List\_of\_current\_NBA\_team\_rosters.  The script leveraged BeautifulSoup4 \cite{beautifulsoup}, a Python package that provides an easy to use parser for structured documents such as HTML.  The Wikipedia page was scraped for player team affiliation, player height, player weight, and player age.  The height was represented in meters, weight in pounds, and age as number of years old.  
+
+Each of these characteristics was encoded as a Pyke rule, as shown in Table \ref{tableRules}.  We applied normalization to the player and team names such that all characters were converted to lowercase, special characters (e.g. spaces, hyphens, apostrophes) were replaced with the underscore character, and non-English alphabet characters were replaced with their corresponding English alphabet character (or as close as we could get).  For example, the character é would be replaced by the character e.
 
 \begin{table}
 \begin{center}
@@ -234,32 +242,22 @@ height(brandon\_knight,1.91) \\
 
 \section{Analysis of Results}
 
-\subsection{Web UI}
+Two of the major evaluation metrics for information retrieval tasks are precision and recall.  Wikipedia defines precision as ``the fraction of retrieved documents that are relevant to the query'' \cite{precision} and recall as ``the fraction of documents that are relevant to the query that are successfully retrieved'' \cite{precision}.  Since our fact checker uses the Stanford NER, we naturally inherit the precision and recall performance of that tool.  
+
+While our fact checker is a capable tool for validating claims within the domain we've specified, it is a bit contrived, making it hard to evaluate.  If we were to evaluate our fact checker on a series of randomly picked sports articles, the chance of failure on the relation extraction would likely be very high.  This is due to the fact that we are encoding specific knowledge about player attributes that are unlikely to appear in a story.  In light of this, our major method of evaluating this fact checker was via a web-based user interface, where users could enter a claim and receive feedback from the UI about the truthfulness of the claim.  
+
+To implement the web server, we used the Python CherryPy package.  The server exposed two resources: the main index.html page and a REST API for fact-checking a claim.  The index page contained a text input form, a button for submitting the claim to be fact-checked, a button for enabling/disabling the debug information, and two widgets providing visual feedback of the true/false response of the fact-checker.  
+
+Upon clicking the ``check'' button, the claim that was typed into the text input was posted to the REST API, via an AJAX call, in the form of a URL encoded query string.  The server received and processed the claim, performing the tokenization, part-of-speech tagging, named-entity recognition, and rule extraction in realtime.  The server would then return the debug information, including the tagged entities, and result of the validation to the caller.  The webpage would read the response, update the debug output on screen, and trigger the animation for the corresponding true/false widget.  During the live demonstration on December 7th, the web UI proved to be a valuable way to communicate the effects and abilities of the fact-checker to our audience. Figure \cite{imgWeb} shows a screen shot of the web UI. 
 
 \begin{figure*}
 \includegraphics[width=\textwidth,height=9cm]{factcheck}
-\caption{Fact Checker Web Interface}
-\label{imgWeb}
+\caption{Fact Checker Web Interface}\label{imgWeb}
 \end{figure*}
 
 \section{Discussion}
 
-Your paper's title, authors and affiliations should run across the
-full width of the page in a single column 17.8 cm (7 in.) wide.  The
-title should be in Helvetica 18-point bold; use Arial if Helvetica is
-not available.  Authors' names should be in Times Roman 12-point bold,
-and affiliations in Times Roman 12-point (note that Author and
-Affiliation are defined Styles in this template file).
 
-To position names and addresses, use a single-row table with invisible
-borders, as in this document.  Alternatively, if only one address is
-needed, use a centered tab stop to center all name and address text on
-the page; for two addresses, use two centered tab stops, and so
-on. For more than three authors, you may have to place some address
-information in a footnote, or in a named section at the end of your
-paper. Please use full international addresses and telephone dialing
-prefixes.  Leave one 10-pt line of white space below the last line of
-affiliations.
 
 \subsection{Ethical implications of this work}
 
@@ -280,30 +278,10 @@ The decision about whether or not to use a source like this could depend on an e
 
 \section{Conclusions}
 
-Every submission should begin with an abstract of about 150 words,
-followed by a set of keywords. The abstract and keywords should be
-placed in the left column of the first page under the left half of the
-title. The abstract should be a concise statement of the problem,
-approach and conclusions of the work described.  It should clearly
-state the paper's contribution to the field of HCI.
-
-The first set of keywords will be used to index the paper in the
-proceedings. The second set are used to catalogue the paper in the ACM
-Digital Library. The latter are entries from the ACM Classification
-System~\cite{acm_categories}.  In general, it should only be necessary
-to pick one or more of the H5 subcategories, see
-http://www.acm.org/class/1998/H.5.html
 
 \section{Acknowledgments}
 
-Please use a 10-point Times Roman font or, if this is unavailable,
-another proportional font with serifs, as close as possible in
-appearance to Times Roman 10-point. The Press 10-point font available
-to users of Script is a good substitute for Times Roman. If Times
-Roman is not available, try the font named Computer Modern Roman. On a
-Macintosh, use the font named Times and not Times New Roman. Please
-use sans-serif or non-proportional fonts only for special purposes,
-such as headings or source code text.
+The work described in this paper was conducted as part of a Fall 2016 Artificial Intelligence course, taught in the Computer Science department of the University of Massachusetts Lowell by Prof. Fred Martin.
 
 \bibliographystyle{abbrv}
 \bibliography{factcheck}
