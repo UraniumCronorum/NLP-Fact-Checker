@@ -34,7 +34,7 @@ breaklinks=true,
 
 % use this command to override the default ACM copyright statement 
 % (e.g. for preprints). Remove for camera ready copy.
-\toappear{Submitted for review to CHI 2009.}
+%\toappear{Submitted for review to CHI 2009.}
 
 \title{Natural Language Fact Checker}
 \numberofauthors{2}
@@ -90,7 +90,7 @@ For the fact checker, our NLP pipeline consists of the following four steps:
 \begin{itemize}
    \item Tokenization
    \item Part-of-speech tagging
-   \item Named entity tagging
+   \item Named-entity Extraction
    \item Relation Extraction
 \end{itemize}
 
@@ -107,7 +107,7 @@ word_tokenize API.'')
 'API', '.']
 \end{lstlisting}
 
-Part-of-speech tagging is the process of identifying the part-of-speech for a given token.  The NLTK pos\_tag method relies on a pretrained Perceptron to classify a token's part-of-speech based on its context.  The pos\_tag method takes a list of string tokens and produces a list of token-tag pairs.  Each tag is represented as an abbreviation of the part-of-speech, and may include information about plurality, possession, and tense.  A collection of tags is referred to as a tagset.  By default, NLTK uses the UPenn tagset \cite{upenn_tags}.  Listing 2 shows an example of the NLTK pos\_tag capability.
+Part-of-speech tagging is the process of identifying the part-of-speech for a given token.  The NLTK pos\_tag method relies on a pretrained Perceptron to classify a token's part-of-speech based on its context.  The pos\_tag method takes a list of string tokens and produces a list of token-tag pairs.  Each tag is represented as an abbreviation of the part-of-speech, and may include information about plurality, possession, and tense.  A collection of tags is referred to as a tagset.  Listing 2 shows an example of the NLTK pos\_tag capability.
 
 \begin{lstlisting}[caption=NLTK POS Tagger Example, label=tagList]
 >>> from nltk import pos_tag
@@ -120,9 +120,38 @@ Part-of-speech tagging is the process of identifying the part-of-speech for a gi
 ('.', '.')]
 \end{lstlisting}
 
+By default, NLTK uses the UPenn tagset \cite{upenn_tags}.  Table \ref{tableTags} describes the tags shown in the example.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ | l l | }
+\hline
+Tag & Definition \\
+\hline
+DT & determiner \\
+NN & singular noun \\ 
+NNP & proper noun \\ 
+POS & possessive marker \\
+VBG & verb, gerund \\ 
+VBN & verb, past participle \\
+VBZ & verb, 3rd person singular \\
+. & period \\
+\hline
+\end{tabular}
+\caption{Some UPenn Tagset Definitions}
+\label{tableTags}
+\end{center}
+\end{table}
+
+Named-entity extraction is the process of identifying tokens or phrases which refer to named entities within text.  Typical named-entities include people, locations, cardinal numbers, and organizations.  NLTK has several named-entity recognizer APIs, however, we chose to use the NLTK interface to the Stanford Named-Entity Recognizer \cite{stanfordner}.  The Stanford NER is a standalone Java tool that must be installed separately, but may be called from Python code using the NLTK interface.  The Stanford NER uses one or more conditional random field models trained on the CoNLL 2003 eng \cite{conll2003} and MUC 6/7 \cite{muc6} datasets to identify named entities.  The API for the named-entity extractor is similar to the POS tagger - it expects a list of tokens and returns a list of token, tag pairs, where the tags are one of 4 classes: location, person, organization, or other.
+
+Relation extraction is the process of determining a relationship between one or more entities.  NLTK provides APIs for relation extraction, however we were not able to get them working to our satisfaction.  Instead of using the provided APIs for relation extraction, we took an approach using regular expressions.  Using the Python re module, We created a series of regular expressions that would match if text indicating a certain relationship was present.
+
 \subsection{Logic Programming}
 
-\subsection{Scraper}
+
+\subsection{Data}
+
 
 \subsection{Web UI}
 
