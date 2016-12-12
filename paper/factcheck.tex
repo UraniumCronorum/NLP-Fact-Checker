@@ -201,6 +201,27 @@ Merged Tags:
 
 \subsection{Logic Programming}
 
+The logical reasoning component takes as input the relations extracted by the NLP component and compares them against its knowledge base in order to find contradictions (proving the claim false) or proofs (proving the claim true).
+
+The logical deduction is mostly handled by PyKE (Python Knowledge Engine). \cite{PyKE} Like Prolog, PyKE uses backward-chaining logic to search for proofs of relations based on given facts and rules of deduction. While it may sound like this can easily be hooked up to the NLP component and the work is done, what PyKE doesn't do (on its own) is \textit{disprove} relations. The solution to this is to search for proofs of relations that contradict the relation to be disproved.
+
+Some of these PyKE rules are simple;
+for example, a claim that a player weighs a certain amount is confirmed if the corresponding ``weighs'' relation exists;
+but some of them are more complicated, such as the ``heavier'' relation, which requires PyKE to find two ``weighs'' relations and compare their values.
+
+Forming contradictory relations is handled in Python (i.e. outside of PyKE), and the way to do it varies depending on the type of relation. For example, the ``weighs'' relation is contradicted by any ``weighs'' relation with the same player and a different weight. The ``heavier'' relation, on the other hand, is contradicted by a ``heavier'' relation that puts the two players in the opposite order.
+
+Because the ways to find contradictions vary, and because the logic component is meant to be general-purpose, rather than specific to a certain kind of claims, the logic component needs a way to load different logical rules and perform deduction on them in a general way.
+
+For this reason, a class called ``RuleBase'' is created that can be inherited from in order to define new logical systems.
+Inheriting from the RuleBase means defining the methods ``provable'' and ``contradicts'', the former of which should return True if the claim is provably true, and False otherwise, and the latter of which should return True if the claim is provably false, and False otherwise.
+
+This class makes no assumption about how the logical rules are implemented; in the case of the sports logic, these rules are defined and implemented using PyKE, but the unit tests for the class ``KnowledgeBase'' are defined in terms of a truth-table logic which does not use any PyKE whatsoever.
+
+The ``KnowledgeBase'' class was intended to be used to store both claims to be proved and disproved, and the knowns these proofs are based on.
+In practice, since the knowns used for the sports logic were scraped from Wikipedia, bypassing the NLP component, these knowns were hardcoded as PyKE relations in a ``.kfb'' (knowledge fact base) file.
+The claims input by the user in the UI, meanwhile, were not stored in the database at all.
+Instead, they were simply evaluated by the database in order to determine the correct truth value.
 
 \subsection{Data}
 Due to time constraints, we restricted our fact checker to the domain of American professional basketball.  The reasons for this were many:
@@ -244,23 +265,37 @@ height(brandon\_knight,1.91) \\
 
 Two of the major evaluation metrics for information retrieval tasks are precision and recall.  Wikipedia defines precision as ``the fraction of retrieved documents that are relevant to the query'' \cite{precision} and recall as ``the fraction of documents that are relevant to the query that are successfully retrieved'' \cite{precision}.  Since our fact checker uses the Stanford NER, we naturally inherit the precision and recall performance of that tool.  
 
-While our fact checker is a capable tool for validating claims within the domain we've specified, it is a bit contrived, making it hard to evaluate.  If we were to evaluate our fact checker on a series of randomly picked sports articles, the chance of failure on the relation extraction would likely be very high.  This is due to the fact that we are encoding specific knowledge about player attributes that are unlikely to appear in a story.  In light of this, our major method of evaluating this fact checker was via a web-based user interface, where users could enter a claim and receive feedback from the UI about the truthfulness of the claim.  
-
-To implement the web server, we used the Python CherryPy package.  The server exposed two resources: the main index.html page and a REST API for fact-checking a claim.  The index page contained a text input form, a button for submitting the claim to be fact-checked, a button for enabling/disabling the debug information, and two widgets providing visual feedback of the true/false response of the fact-checker.  
-
-Upon clicking the ``check'' button, the claim that was typed into the text input was posted to the REST API, via an AJAX call, in the form of a URL encoded query string.  The server received and processed the claim, performing the tokenization, part-of-speech tagging, named-entity recognition, and rule extraction in realtime.  The server would then return the debug information, including the tagged entities, and result of the validation to the caller.  The webpage would read the response, update the debug output on screen, and trigger the animation for the corresponding true/false widget.  During the live demonstration on December 7th, the web UI proved to be a valuable way to communicate the effects and abilities of the fact-checker to our audience. Figure \cite{imgWeb} shows a screen shot of the web UI. 
+\subsection{Web UI}
 
 \begin{figure*}
 \includegraphics[width=\textwidth,height=9cm]{factcheck}
 \caption{Fact Checker Web Interface}\label{imgWeb}
 \end{figure*}
 
+While our fact checker is a capable tool for validating claims within the domain we've specified, it is a bit contrived, making it hard to evaluate.  If we were to evaluate our fact checker on a series of randomly picked sports articles, the chance of failure on the relation extraction would likely be very high.  This is due to the fact that we are encoding specific knowledge about player attributes that are unlikely to appear in a story.  In light of this, our major method of evaluating this fact checker was via a web-based user interface, where users could enter a claim and receive feedback from the UI about the truthfulness of the claim.  
+
+To implement the web server, we used the Python CherryPy package.  The server exposed two resources: the main index.html page and a REST API for fact-checking a claim.  The index page contained a text input form, a button for submitting the claim to be fact-checked, a button for enabling/disabling the debug information, and two widgets providing visual feedback of the true/false response of the fact-checker.  
+
+Upon clicking the ``check'' button, the claim that was typed into the text input was posted to the REST API, via an AJAX call, in the form of a URL encoded query string.  The server received and processed the claim, performing the tokenization, part-of-speech tagging, named-entity recognition, and rule extraction in realtime.  The server would then return the debug information, including the tagged entities, and result of the validation to the caller.  The webpage would read the response, update the debug output on screen, and trigger the animation for the corresponding true/false widget.  During the live demonstration on December 7th, the web UI proved to be a valuable way to communicate the effects and abilities of the fact-checker to our audience. Figure \ref{imgWeb} shows a screen shot of the web UI. 
+
+\subsection{Logic Engine Unit Tests}
+
+The logic component defines unit tests for the ``KnowledgeBase'' class, which allows us to verify the correct operation of its features, including some of those that were not used by the web UI. Because the knowledge base depends on a RuleBase in order to work, these tests also test the ``RuleBase'' superclass.
+
+The most noteworthy feature implemented by the logic component but not used by the final web UI is the ability to group claims by their sources and use this grouping to rank these sources in certain ways, such assigning ``reliability'' rankings to the sources based on how the ratio of true:false claims. These features are tested by the ``SourceTest'' tests.
+
+There are three tests:
+``KnowledgeTest.testAdd'' checks that the ``addKnown'' and ``addClaim'' methods successfully add claims to the database, and that the truth of a claim to be evaluated is successfully determined based on the claims added using ``addKnown'' (and ignoring claims added using ``addClaim'');
+``SourceTest.testTruthRanking'' checks that the method ``truthRanking'', which takes a single source as its argument, correctly returns a tuple representing the ratio of true:false:unknown claims by that source, and that the method ``reliability'' returns a floating point value representing the fraction of provably true or false claims that are true;
+finally, ``SourceTest.testContradictions'' checks that the method ``contradictsSelf'' returns True if and only if the source has made contradictory claims.
+
+All of these tests pass.
+
 \section{Discussion}
 
 Given that our fact-checker applied elements of artificial intelligence that weren't necessarily covered in class, we learned a great deal about natural language processing and logic programming while implementing this project.  During the proposal phase, we were both unsure about the feasibility of an automated fact-checker and did a lot of research to identify the available techniques and make a judgment call on how realistic this project might be given the time constraints.  Our research involved reading unassigned chapters of Russell and Norvig, exploring state of the art research in the area of automated fact checking, and evaluating potential software libraries and tools.  
 
 We definitely gained an appreciation for the difficulties involved in natural language processing.  In fact, some of the limiting factors of the project were due to the complexity of the natural language processing component.  For example, the ability to resolve subjects and objects in a verb phrase would enhance the capability of the relation extractor by allowing more sophisticated sentences to be parsed.  This task is doable with NLTK, however, it requires a vast amount of linguistic knowledge to be able to interpret parse trees and other data structures.  Also, our fact-checker only handles single sentence claims, where all of the information we extract is present.  In the real word, authors typically use pronouns in place of proper nouns, employ sarcasm or literary devices, and spread information over multiple sentences.  These factors make the task of information extraction difficult, though there are established techniques to do this.
-
 
 \subsection{Ethical implications of this work}
 
@@ -280,6 +315,7 @@ Additionally, some potential sources, such as WikiLeaks, have questionable legal
 The decision about whether or not to use a source like this could depend on an ethical judgment about whether it is okay to use information that has been distributed in violation of laws--or indeed whether there is an obligation to distribute censored information as an act of civil disobedience.
 
 \section{Conclusions}
+
 
 
 \section{Acknowledgments}
