@@ -58,7 +58,7 @@ breaklinks=true,
 \maketitle
 
 \begin{abstract}
-The Internet has revolutionized the way information is disseminated, making it harder for people to discern which claims are actual fact and which have been exaggerated or falsified.  In this paper, we address the problem of automating fact-checking via natural language processing and logic programming.  We present a software system which can verify certain classes of claims in the domain of American professional basketball.  This work provides a proof of concept and sets the stage for further work in the area of automated fact checking.
+The Internet has revolutionized the way information is disseminated, making it harder for people to discern which claims are actual fact and which have been exaggerated or falsified.  In this paper, we address the problem of automating fact-checking via natural language processing and logic programming.  We present a software system which can verify certain classes of claims in the domain of American professional basketball.  In this system, claims are tokenized, annotated with part-of-speech and named-entities, and relationships between entities are extracted.  Next, the relations are used to consult a knowledge base which has been previously populated with rules representing knowledge about the domain. First order logic rules are applied to the relation and are validated or invalidated by the knowledge engine.  This work provides a proof of concept and sets the stage for further work in the area of automated fact checking.
 \end{abstract}
 
 \keywords{automated fact checking} 
@@ -331,6 +331,9 @@ The decision about whether or not to use a source like this could depend on an e
 \section{Acknowledgments}
 
 The work described in this paper was conducted as part of a Fall 2016 Artificial Intelligence course, taught in the Computer Science department of the University of Massachusetts Lowell by Prof. Fred Martin.
+
+The work on this project was split evenly based upon the two basic components.  The natural language processing component was implemented by Joshua Kraunelis, including the tokenization, part-of-speech tagging, named-entity recognition, and relation extraction.  Also, Joshua was primarily responsible for the Web UI, given his previous experience with designing a similar web system.
+
 
 \bibliographystyle{abbrv}
 \bibliography{factcheck}
