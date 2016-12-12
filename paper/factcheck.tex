@@ -316,7 +316,20 @@ The decision about whether or not to use a source like this could depend on an e
 
 \section{Conclusions}
 
+Our implementation has many limitations, but we have successfully created an AI that is capable of accurately assessing the truth of certain claims made in the English language. 
+Not only that, but the AI correctly interprets certain kinds of complicated sentences that imply two relations at once, and can determine the truth value of the sentences based on these relations.
 
+There is plenty more that could be done here.
+While working on this project, we had considered attempting to analyze some claims made during the presidential debates, but a quick look at the transcripts reveals the problem with this: statements during the debates take a variety of forms, including statements of opinion, references to claims made by others, and facetious statements. Additionally, the debates aren't always civil--Trump and Clinton interrupted and talked over each other on quite a few (potentially very interesting) occasions. These factors make analysis very difficult, requiring quite a bit of work on both the NLP and the logic side.
+
+However, looking for ways to tackle these problems could be very interesting.
+
+Another future direction is to look for ways to apply the source analysis features mentioned earlier.
+The current way a source's reliability rating is calculated is very simple, but a more useful result might be calculated based on agreement with other reliable sources, and details such as where the source is published.
+In addition, new features that make use of source information could be added, such as constructing an ``agreement network'' that represents how much different sources tend to make claims that agree with or contradict each other.
+
+Finally, a major feature that would be useful to an AI like this is a means for analyzing statistical claims.
+Many politicians rely on statistics for many of the claims they make, and it would be useful to create an AI that is capable of analyzing not only where those statistics come from and whether they accurately reflect the results indicated by the source, but also the reliability of that source's results based on factors like p-values, sample size, and the like.
 
 \section{Acknowledgments}
 
