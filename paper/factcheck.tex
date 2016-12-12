@@ -267,16 +267,16 @@ Two of the major evaluation metrics for information retrieval tasks are precisio
 
 \subsection{Web UI}
 
+\begin{figure*}
+\includegraphics[width=\textwidth,height=9cm]{factcheck}
+\caption{Fact Checker Web Interface}\label{imgWeb}
+\end{figure*}
+
 While our fact checker is a capable tool for validating claims within the domain we've specified, it is a bit contrived, making it hard to evaluate.  If we were to evaluate our fact checker on a series of randomly picked sports articles, the chance of failure on the relation extraction would likely be very high.  This is due to the fact that we are encoding specific knowledge about player attributes that are unlikely to appear in a story.  In light of this, our major method of evaluating this fact checker was via a web-based user interface, where users could enter a claim and receive feedback from the UI about the truthfulness of the claim.  
 
 To implement the web server, we used the Python CherryPy package.  The server exposed two resources: the main index.html page and a REST API for fact-checking a claim.  The index page contained a text input form, a button for submitting the claim to be fact-checked, a button for enabling/disabling the debug information, and two widgets providing visual feedback of the true/false response of the fact-checker.  
 
 Upon clicking the ``check'' button, the claim that was typed into the text input was posted to the REST API, via an AJAX call, in the form of a URL encoded query string.  The server received and processed the claim, performing the tokenization, part-of-speech tagging, named-entity recognition, and rule extraction in realtime.  The server would then return the debug information, including the tagged entities, and result of the validation to the caller.  The webpage would read the response, update the debug output on screen, and trigger the animation for the corresponding true/false widget.  During the live demonstration on December 7th, the web UI proved to be a valuable way to communicate the effects and abilities of the fact-checker to our audience. Figure \ref{imgWeb} shows a screen shot of the web UI. 
-
-\begin{figure}
-\includegraphics[width=\textwidth,height=9cm]{factcheck}
-\caption{Fact Checker Web Interface}\label{imgWeb}
-\end{figure}
 
 \subsection{Logic Engine Unit Tests}
 
