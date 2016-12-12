@@ -273,14 +273,23 @@ To implement the web server, we used the Python CherryPy package.  The server ex
 
 Upon clicking the ``check'' button, the claim that was typed into the text input was posted to the REST API, via an AJAX call, in the form of a URL encoded query string.  The server received and processed the claim, performing the tokenization, part-of-speech tagging, named-entity recognition, and rule extraction in realtime.  The server would then return the debug information, including the tagged entities, and result of the validation to the caller.  The webpage would read the response, update the debug output on screen, and trigger the animation for the corresponding true/false widget.  During the live demonstration on December 7th, the web UI proved to be a valuable way to communicate the effects and abilities of the fact-checker to our audience. Figure \ref{imgWeb} shows a screen shot of the web UI. 
 
-%\begin{figure}
-%\includegraphics[width=\textwidth,height=9cm]{factcheck}
-%\caption{Fact Checker Web Interface}\label{imgWeb}
-%\end{figure}
+\begin{figure}
+\includegraphics[width=\textwidth,height=9cm]{factcheck}
+\caption{Fact Checker Web Interface}\label{imgWeb}
+\end{figure}
 
-\subsection{Logic Engine}
+\subsection{Logic Engine Unit Tests}
 
+The logic component defines unit tests for the ``KnowledgeBase'' class, which allows us to verify the correct operation of its features, including some of those that were not used by the web UI. Because the knowledge base depends on a RuleBase in order to work, these tests also test the ``RuleBase'' superclass.
 
+The most noteworthy feature implemented by the logic component but not used by the final web UI is the ability to group claims by their sources and use this grouping to rank these sources in certain ways, such assigning ``reliability'' rankings to the sources based on how the ratio of true:false claims. These features are tested by the ``SourceTest'' tests.
+
+There are three tests:
+``KnowledgeTest.testAdd'' checks that the ``addKnown'' and ``addClaim'' methods successfully add claims to the database, and that the truth of a claim to be evaluated is successfully determined based on the claims added using ``addKnown'' (and ignoring claims added using ``addClaim'');
+``SourceTest.testTruthRanking'' checks that the method ``truthRanking'', which takes a single source as its argument, correctly returns a tuple representing the ratio of true:false:unknown claims by that source, and that the method ``reliability'' returns a floating point value representing the fraction of provably true or false claims that are true;
+finally, ``SourceTest.testContradictions'' checks that the method ``contradictsSelf'' returns True if and only if the source has made contradictory claims.
+
+All of these tests pass.
 
 \section{Discussion}
 
